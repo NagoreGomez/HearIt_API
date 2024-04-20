@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+
+  api:
+    build: ./api/.
+    volumes:
+      - ./api/images:/hearit_api/app/images
+      - /home/nagore/das/api/app/firebase_key.json:/hearit_api/app/firebase_key.json  
+
+    restart: always
+    environment:
+      POSTGRES_IP: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4
+      POSTGRES_DB: mydatabase
+      FIREBASE_CREDENTIALS: /hearit_api/app/firebase_key.json  
+      
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    command: uvicorn app.main:app --host 0.0.0.0 --reload 

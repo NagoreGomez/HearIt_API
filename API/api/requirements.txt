@@ -1,0 +1,11 @@
+fastapi
+pydantic
+uvicorn
+sqlalchemy
+psycopg2
+databases[postgresql]
+bcrypt
+python-multipart
+Unidecode
+python-jose[cryptography]
+firebase-admin
